@@ -1,0 +1,30 @@
+{
+  "name": "trial-senior-test",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "src/server.ts",
+  "engine": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "node --watch src/server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.1"
+  },
+  "dependencies": {
+    "@fastify/multipart": "^9.4.0",
+    "csv-parse": "^6.2.1",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.3.1",
+    "fastify": "^5.8.4",
+    "zod": "^4.3.6"
+  }
+}
