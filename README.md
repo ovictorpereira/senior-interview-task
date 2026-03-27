@@ -1,6 +1,7 @@
-# trial-senior-test
+# senior-interview-task
 
-> Repositório do teste técnico utilizado em uma entrevista real para vaga de desenvolvedor sênior no exterior.
+> Resolução do teste técnico utilizado em uma entrevista real para vaga de desenvolvedor sênior no exterior.
+> Baseado no vídeo [entrevista técnica real](https://youtu.be/QNRg8FBc8U0)
 
 ---
 
