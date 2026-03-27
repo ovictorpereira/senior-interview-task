@@ -8,7 +8,7 @@ export interface RawCsvRecord {
   product_id?: string;
   product_name?: string;
   type?: string;
-  quantity?: number;
+  quantity?: string;
 }
 
 export interface InventoryRecord {
@@ -77,10 +77,11 @@ export class CsvInventoryParserService implements CsvInventoryParser {
       throw new Error(`Invalid "type" record: ${record.type}`);
     }
 
-    const quantity = Number(record.quantity);
+    const quantity =
+      record.type == "in" ? Number(record.quantity) : -Number(record.quantity);
 
     if (Number.isNaN(quantity)) {
-      throw new Error(`"Quantity" value is not a number: ${quantity}`);
+      throw new Error(`"Quantity" value is not a number: ${record.quantity}`);
     }
 
     return {

@@ -39,51 +39,67 @@ export class AnalyzeInventoryUseCase {
   ): Promise<AnalyzeInventoryResponse> {
     const { fileStream } = request;
 
-    const { records, csvErrors } = await this.csvParser.parse(fileStream);
+    const { records } = await this.csvParser.parse(fileStream);
 
-    const stock = this.buildStock(records);
+    const sortedRecords = [...records].sort(
+      (a, b) => Number(a.timestamp) - Number(b.timestamp),
+    );
 
-    console.log("csv row errors: ", csvErrors);
+    const { stock, anomalies } = this.buildStock(sortedRecords);
 
     return {
       stock,
       low_stock: this.filterLowStock(stock),
-      anomalies: this.filterAnomalies(stock),
+      anomalies: anomalies,
     };
   }
 
-  private buildStock(records: InventoryRecord[]): StockItem[] {
-    const result: StockItem[] = [];
+  private buildStock(records: InventoryRecord[]): {
+    stock: StockItem[];
+    anomalies: AnomalyResponse[];
+  } {
+    const stock: StockItem[] = [];
+    const anomalies: AnomalyResponse[] = [];
 
     records.forEach((record) => {
-      const existing = result.find((i) => i.product_id === record.product_id);
+      const existing = stock.find((i) => i.product_id === record.product_id);
+
       if (!existing) {
-        result.push({
+        const entry: StockItem = {
           product_id: record.product_id,
           product_name: record.product_name,
           quantity: record.quantity,
-        });
+        };
+
+        stock.push(entry);
+
+        if (record.quantity < 0) {
+          anomalies.push({
+            product_id: entry.product_id,
+            product_name: entry.product_name,
+            message: "Stock went negative",
+          });
+        }
       } else {
-        record.type === "in"
-          ? (existing.quantity += record.quantity)
-          : (existing.quantity -= record.quantity);
+        existing.quantity += record.quantity;
+
+        if (
+          existing.quantity < 0 &&
+          !anomalies.find((a) => a.product_id === existing.product_id)
+        ) {
+          anomalies.push({
+            product_id: existing.product_id,
+            product_name: existing.product_name,
+            message: "Stock went negative",
+          });
+        }
       }
     });
 
-    return result;
+    return { stock, anomalies };
   }
 
   private filterLowStock(stock: StockItem[]): StockItem[] {
     return stock.filter((i) => i.quantity < LOW_STOCK_THRESHOLD);
-  }
-
-  private filterAnomalies(stock: StockItem[]): AnomalyResponse[] {
-    return stock
-      .filter((i) => i.quantity < 0)
-      .map((i) => ({
-        product_id: i.product_id,
-        product_name: i.product_name,
-        message: "Stock went negative",
-      }));
   }
 }
