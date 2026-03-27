@@ -1,5 +1,6 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { AnalyzeInventoryUseCase } from "../../use-cases/analyze-inventory-use-case.ts";
+import { CsvInventoryParserService } from "../../services/csv-inventory-parser-service.ts";
 
 export async function analyzeInventory(
   request: FastifyRequest,
@@ -14,6 +15,9 @@ export async function analyzeInventory(
   }
 
   const fileStream = data.file;
-  const useCase = new AnalyzeInventoryUseCase();
-  await useCase.execute({ fileStream });
+  const csvService = new CsvInventoryParserService();
+  const useCase = new AnalyzeInventoryUseCase(csvService);
+  const result = await useCase.execute({ fileStream });
+
+  return reply.code(200).send(result);
 }
