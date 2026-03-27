@@ -10,7 +10,7 @@ export async function analyzeInventory(
 
   if (!data) {
     return reply.code(400).send({
-      message: "File is required",
+      message: "CSV File is required",
     });
   }
 
