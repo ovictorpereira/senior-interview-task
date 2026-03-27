@@ -5,12 +5,12 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "src/server.ts",
+  "main": "src/app.ts",
   "engine": {
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "node --watch src/server.ts",
+    "dev": "node --watch src/app.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
