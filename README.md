@@ -1,7 +1,17 @@
 # senior-interview-task
 
-> Resolução do teste técnico utilizado em uma entrevista real para vaga de desenvolvedor sênior no exterior.
-> Baseado no vídeo [entrevista técnica real](https://youtu.be/QNRg8FBc8U0)
+> Solution to a technical test used in a real senior developer interview.
+> Based on the video [real technical interview](https://youtu.be/QNRg8FBc8U0)
+
+## Stack
+
+- **Runtime:** Node.js 22+
+- **Language:** TypeScript
+- **Framework:** Fastify
+- **File upload:** @fastify/multipart
+- **CSV parsing:** csv-parse
+- **Schema validation:** Zod
+- **Testing:** Vitest + Supertest
 
 ---
 
