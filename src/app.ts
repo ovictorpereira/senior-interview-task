@@ -1,12 +1,12 @@
 import fastify from "fastify";
 import multipart from "@fastify/multipart";
-import { seniorTestRoutes } from "./http/controllers/routes.ts";
+import { appRoutes } from "./http/controllers/routes.ts";
 import { env } from "../env/index.ts";
 
 const app = fastify();
 
 app.register(multipart);
-app.register(seniorTestRoutes);
+app.register(appRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (env.NODE_ENV !== "production") {
