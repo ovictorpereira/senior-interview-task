@@ -14,6 +14,14 @@ export async function analyzeInventory(
     });
   }
 
+  const extension = data?.filename.split(".").pop()?.toLowerCase();
+
+  if (extension !== "csv") {
+    return reply.code(400).send({
+      message: "Only CSV files are allowed",
+    });
+  }
+
   const fileStream = data.file;
   const csvService = new CsvInventoryParserService();
   const useCase = new AnalyzeInventoryUseCase(csvService);
